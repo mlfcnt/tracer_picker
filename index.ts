@@ -1,9 +1,15 @@
-import { intro, outro, text, select, log } from "@clack/prompts";
+import {
+  intro,
+  outro,
+  text,
+  select,
+  log,
+  isCancel,
+  cancel,
+} from "@clack/prompts";
 import puppeteer from "puppeteer";
 import { accessTheSite, login, accessTheCompetitionPage } from "./domHelpers";
 import { selectCommittees } from "./selectComittees";
-
-intro(`Tracer picker v1 ⛷️`);
 
 async function main() {
   if (!process.env.EMAIL) {
@@ -18,10 +24,17 @@ async function main() {
     );
   }
 
+  intro(`Tracer picker v1 ⛷️`);
   // Get user inputs
   const competitionCode = (await text({
     message: "Quel est le code de la competition ?",
   })) as string;
+
+  if (isCancel(competitionCode)) {
+    cancel("Opération annulée.");
+    outro("Martin Constructions vous remercie pour votre confiance.");
+    process.exit(0);
+  }
 
   const comiteCode = (await select({
     message: "Dans quel comité se situe la compétition ?",
@@ -38,6 +51,12 @@ async function main() {
       { value: "CA", label: "CA" },
     ],
   })) as string;
+
+  if (isCancel(comiteCode)) {
+    cancel("Opération annulée.");
+    outro("Martin Constructions vous remercie pour votre confiance.");
+    process.exit(0);
+  }
 
   // Launch browser
   const browser = await puppeteer.launch({
@@ -62,7 +81,6 @@ async function main() {
     log.error("Erreur lors de la recherche de la compétition");
     outro("Martin Constructions s'excuse pour la gêne occasionnée.");
   } finally {
-    // await delay(30_000);
     await browser.close();
   }
 }
