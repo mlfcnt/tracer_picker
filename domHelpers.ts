@@ -1,6 +1,8 @@
 import type { Page } from "puppeteer";
 import { log, spinner } from "@clack/prompts";
 import { delay } from "./lib";
+import { retry } from "./src/utils/retry";
+import { COMMITTEE_CODES } from "./constants";
 
 export const accessTheSite = async (page: Page) => {
   const s = spinner();
@@ -101,26 +103,49 @@ export async function searchForTheCompetition(
 
     log.success("Compétition trouvée ✅");
 
+    const url = await page.evaluate(() => {
+      const url = document.querySelector("tr a") as HTMLAnchorElement;
+      return url?.href;
+    });
+    const commiteeCode = await page.evaluate(() => {
+      const commiteeCode = document.querySelector(
+        "tr td:nth-child(13)"
+      ) as HTMLAnchorElement;
+      return commiteeCode?.textContent;
+    });
+
+    if (!commiteeCode) {
+      throw new Error("Aucun comité trouvé pour la compétition");
+    }
+
+    if (!url) {
+      throw new Error("Aucune url trouvée pour la compétition");
+    }
+
+    if (!COMMITTEE_CODES[commiteeCode as keyof typeof COMMITTEE_CODES]) {
+      throw new Error("Comité non supporté : " + commiteeCode);
+    }
+
+    log.info("Url de la compétition : " + url);
+    log.info(
+      "Comité : " +
+        COMMITTEE_CODES[commiteeCode as keyof typeof COMMITTEE_CODES]
+    );
+
+    await retry(
+      async () => {
+        await page.goto(url);
+        await page.waitForNetworkIdle();
+      },
+      {
+        delay: 1000,
+        maxAttempts: 3,
+      }
+    );
+
     s.stop("Compétition trouvée ✅");
   } catch (error) {
     s.stop("Erreur lors de la recherche ❌");
     throw error;
   }
 }
-
-export const accessTheCompetitionPage = async (
-  page: Page,
-  competitionCode: string
-) => {
-  const s = spinner();
-  try {
-    s.start("Accès à la page de la compétition...");
-    await page.goto(
-      `https://inscription.ffs.fr/participant.php?code=${competitionCode}`
-    );
-    s.stop("Accès à la page de la compétition ✅");
-  } catch (error) {
-    s.stop("Erreur lors de l'accès à la compétition ❌");
-    throw error;
-  }
-};

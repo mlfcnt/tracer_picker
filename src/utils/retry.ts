@@ -4,10 +4,10 @@ type RetryOptions = {
   onRetry?: (attempt: number, error: Error) => void;
 };
 
-export async function retry<T>(
+export const retry = async <T>(
   fn: () => Promise<T>,
   options: RetryOptions = {}
-): Promise<T> {
+): Promise<T> => {
   const {
     maxAttempts = 3,
     delay = 1000,
@@ -31,4 +31,4 @@ export async function retry<T>(
   }
 
   throw lastError!;
-}
+};

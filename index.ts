@@ -8,8 +8,9 @@ import {
   cancel,
 } from "@clack/prompts";
 import puppeteer from "puppeteer";
-import { accessTheSite, login, accessTheCompetitionPage } from "./domHelpers";
+import { accessTheSite, login, searchForTheCompetition } from "./domHelpers";
 import { selectCommittees } from "./selectComittees";
+import { COMMITTEE_CODES } from "./constants";
 
 async function main() {
   if (!process.env.EMAIL) {
@@ -45,18 +46,10 @@ async function main() {
 
   const comiteCode = (await select({
     message: "Dans quel comité se situe la compétition ?",
-    options: [
-      { value: "SA", label: "SA" },
-      { value: "MB", label: "MB" },
-      { value: "AP", label: "AP" },
-      { value: "DA", label: "DA" },
-      { value: "ORS", label: "ORS" },
-      { value: "APEX", label: "APEX" },
-      { value: "MV", label: "MV" },
-      { value: "MJ", label: "MJ" },
-      { value: "PE", label: "PE" },
-      { value: "CA", label: "CA" },
-    ],
+    options: Object.values(COMMITTEE_CODES).map((code) => ({
+      title: code,
+      value: code,
+    })),
   })) as string;
 
   if (isCancel(comiteCode)) {
@@ -79,8 +72,8 @@ async function main() {
   try {
     await accessTheSite(page);
     await login(page, process.env.EMAIL, process.env.PASSWORD);
-    // await searchForTheCompetition(page, competitionCode);
-    await accessTheCompetitionPage(page, competitionCode);
+    await searchForTheCompetition(page, competitionCode);
+    // await accessTheCompetitionPage(page, competitionCode);
     await selectCommittees(page, comiteCode);
     outro("Martin Constructions vous remercie pour votre confiance.");
   } catch (error) {
