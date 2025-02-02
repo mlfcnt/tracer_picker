@@ -56,13 +56,14 @@ async function main() {
     // await searchForTheCompetition(page, competitionCode);
     await accessTheCompetitionPage(page, competitionCode);
     await selectCommittees(page, comiteCode);
+    outro("Martin Constructions vous remercie pour votre confiance.");
   } catch (error) {
     console.error("Erreur lors du processus :", error);
     log.error("Erreur lors de la recherche de la compétition");
+    outro("Martin Constructions s'excuse pour la gêne occasionnée.");
   } finally {
     // await delay(30_000);
     await browser.close();
-    outro("Martin Constructions vous remercie pour votre confiance.");
   }
 }
 

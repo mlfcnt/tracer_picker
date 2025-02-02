@@ -15,18 +15,25 @@ export const selectCommittees = async (page: Page, comiteCode: string) => {
   });
 
   // Create table data
+  const sortedNonHomeCommittees = Object.entries(committeeCounts)
+    .filter(([committee]) => committee !== "" && committee !== comiteCode)
+    .sort(([, countA], [, countB]) => countB - countA);
+
   const tableData = Object.entries(committeeCounts)
     .filter(([committee]) => committee !== "")
     .sort(([, countA], [, countB]) => countB - countA)
     .map(([committee, count]) => {
       const isHomeCommittee = committee === comiteCode;
       let races = "";
+
       if (isHomeCommittee) {
         races = "1, 3";
       } else {
-        const nonHomePosition = Object.entries(committeeCounts)
-          .filter(([c]) => c !== comiteCode)
-          .findIndex(([c]) => c === committee);
+        // Find position in sorted non-home committees
+        const nonHomePosition = sortedNonHomeCommittees.findIndex(
+          ([c]) => c === committee
+        );
+
         if (nonHomePosition === 0) races = "2";
         if (nonHomePosition === 1) races = "4";
       }
