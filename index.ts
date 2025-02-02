@@ -44,19 +44,19 @@ async function main() {
     process.exit(0);
   }
 
-  const comiteCode = (await select({
-    message: "Dans quel comité se situe la compétition ?",
-    options: Object.values(COMMITTEE_CODES).map((code) => ({
-      title: code,
-      value: code,
-    })),
-  })) as string;
+  // const comiteCode = (await select({
+  //   message: "Dans quel comité se situe la compétition ?",
+  //   options: Object.values(COMMITTEE_CODES).map((code) => ({
+  //     title: code,
+  //     value: code,
+  //   })),
+  // })) as string;
 
-  if (isCancel(comiteCode)) {
-    cancel("Opération annulée.");
-    outro("Martin Constructions vous remercie pour votre confiance.");
-    process.exit(0);
-  }
+  // if (isCancel(comiteCode)) {
+  //   cancel("Opération annulée.");
+  //   outro("Martin Constructions vous remercie pour votre confiance.");
+  //   process.exit(0);
+  // }
 
   // Launch browser
   const browser = await puppeteer.launch({
@@ -72,7 +72,7 @@ async function main() {
   try {
     await accessTheSite(page);
     await login(page, process.env.EMAIL, process.env.PASSWORD);
-    await searchForTheCompetition(page, competitionCode);
+    const comiteCode = await searchForTheCompetition(page, competitionCode);
     // await accessTheCompetitionPage(page, competitionCode);
     await selectCommittees(page, comiteCode);
     outro("Martin Constructions vous remercie pour votre confiance.");

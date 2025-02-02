@@ -144,6 +144,7 @@ export async function searchForTheCompetition(
     );
 
     s.stop("Compétition trouvée ✅");
+    return commiteeCode;
   } catch (error) {
     s.stop("Erreur lors de la recherche ❌");
     throw error;
