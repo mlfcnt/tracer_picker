@@ -67,7 +67,6 @@ async function main() {
       deviceScaleFactor: 1,
     },
     args: ["--window-size=1920,1080"],
-    slowMo: 50,
   });
 
   const page = await browser.newPage();
