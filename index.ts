@@ -68,6 +68,7 @@ async function main() {
       date,
       discipline,
     });
+
     fs.writeFileSync("./results/results.html", html);
     await open("./results/results.html");
 
