@@ -3,7 +3,7 @@ import {
   generateCommitteeResults,
   type CommitteeResults,
 } from "./algoSelection";
-import chalk from "chalk";
+// import chalk from "chalk";
 
 export const countCompetitorsByCommittee = (committees: string[]) => {
   return committees.reduce((acc, committee) => {
@@ -25,7 +25,7 @@ const formatResultsForDisplay = (results: CommitteeResults) => {
       );
 
       const entry = {
-        Comité: isHome ? chalk.yellow(committee) : committee,
+        Comité: committee,
         M1: "·",
         M2: "·",
         M3: "·",
@@ -36,13 +36,13 @@ const formatResultsForDisplay = (results: CommitteeResults) => {
 
       // Check each round
       if (isHome) {
-        entry["M1"] = chalk.green("🏠");
-        entry["M3"] = chalk.green("🏠");
+        entry["M1"] = "🏠";
+        entry["M3"] = "🏠";
       }
       if (results.manche2.some((r) => r.committee === committee && r.picked))
-        entry["M2"] = chalk.green("🎲");
+        entry["M2"] = "🎲";
       if (results.manche4.some((r) => r.committee === committee && r.picked))
-        entry["M4"] = chalk.green("🎲");
+        entry["M4"] = "🎲";
 
       const committeeData = [...results.manche1, ...results.manche2].find(
         (r) => r.committee === committee
