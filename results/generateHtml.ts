@@ -27,6 +27,22 @@ export const generateHtml = (
     (r) => r.isHomeCommittee
   )?.committee;
 
+  // Determine header color based on discipline
+  const headerColor = (() => {
+    switch (competitionMetadata.discipline) {
+      case "GS":
+        return "pink";
+      case "SL":
+        return "blue";
+      case "SG":
+        return "green";
+      case "DH":
+        return "yellow";
+      default:
+        return "blue"; // Default color
+    }
+  })();
+
   // Get all committees with their stats for each round
   const getRoundStats = (manche: CommitteeEntry[]) => {
     const selected = manche.filter((r) => r.isHomeCommittee || r.picked);
@@ -42,11 +58,18 @@ export const generateHtml = (
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Résultats Traceurs</title>
         <link rel="stylesheet" href="style.css">
+        <style>
+          .header {
+            background-color: ${headerColor};
+          }
+        </style>
     </head>
     <body>
         <div class="header">
             <h1>🎿 Attribution des Manches</h1>
             <div class="competition-info">
+                <p>${competitionMetadata.discipline} - ${
+    competitionMetadata.date
   }</p>
             </div>
             <p>Généré le ${new Date().toLocaleString("fr-FR")}</p>
