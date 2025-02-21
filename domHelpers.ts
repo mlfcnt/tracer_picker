@@ -2,7 +2,7 @@ import type { Page } from "puppeteer";
 import { log, spinner } from "@clack/prompts";
 import { delay } from "./lib";
 import { retry } from "./src/utils/retry";
-import { COMMITTEE_CODES } from "./constants";
+import { COMMITTEE_CODES, type CommitteeCode } from "./constants";
 
 export const accessTheSite = async (page: Page) => {
   const s = spinner();
@@ -56,7 +56,7 @@ export const clickTheValidateButton = async (page: Page) => {
   await page.click("#btn_ok_identification_ffs");
 };
 
-export async function searchForTheCompetition(
+export async function accessTheCompetitionPage(
   page: Page,
   competitionCode: string
 ) {
@@ -144,7 +144,9 @@ export async function searchForTheCompetition(
     );
 
     s.stop("Compétition trouvée ✅");
-    return commiteeCode;
+    return {
+      committeeCode: commiteeCode as CommitteeCode,
+    };
   } catch (error) {
     s.stop("Erreur lors de la recherche ❌");
     throw error;

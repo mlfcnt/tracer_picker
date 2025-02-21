@@ -3,16 +3,17 @@ import {
   generateCommitteeResults,
   type CommitteeResults,
 } from "./algoSelection";
+import type { CommitteeCode } from "./constants";
 // import chalk from "chalk";
 
-export const countCompetitorsByCommittee = (committees: string[]) => {
+export const countCompetitorsByCommittee = (committees: CommitteeCode[]) => {
   return committees.reduce((acc, committee) => {
     acc[committee] = (acc[committee] || 0) + 1;
     return acc;
-  }, {} as Record<string, number>);
+  }, {} as Record<CommitteeCode, number>);
 };
 
-const formatResultsForDisplay = (results: CommitteeResults) => {
+export const formatResultsForDisplay = (results: CommitteeResults) => {
   const allCommittees = new Set([
     ...results.manche1.map((r) => r.committee),
     ...results.manche2.map((r) => r.committee),
@@ -57,14 +58,33 @@ const formatResultsForDisplay = (results: CommitteeResults) => {
     .sort((a, b) => b["%"] - a["%"]); // Tri par pourcentage décroissant
 };
 
-export const selectCommittees = async (page: Page, comiteCode: string) => {
-  const committeesData = await page.evaluate(() => {
+export const selectCommittees = async (
+  page: Page,
+  comiteCode: CommitteeCode
+) => {
+  const metadata = await page.evaluate(() => {
+    const titre =
+      document
+        .querySelector("#container_info_competition h2")
+        ?.textContent?.trim() || "";
+
+    const discipline = titre.split("-")[1].slice(0, 2);
+    const date = titre.split("du")[1].split(",")[0].trim();
+    return {
+      discipline,
+      date,
+    };
+  });
+
+  const committeesData = (await page.evaluate(() => {
     const csCells = document.querySelectorAll("td.text-center:nth-child(8)");
     return Array.from(csCells).map((cell) => cell.textContent?.trim() || "");
-  });
+  })) as CommitteeCode[];
 
   const committeeCounts = countCompetitorsByCommittee(committeesData);
   const results = generateCommitteeResults(committeeCounts, comiteCode);
-
-  console.table(formatResultsForDisplay(results));
+  return {
+    ...results,
+    ...metadata,
+  };
 };

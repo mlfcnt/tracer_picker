@@ -1,16 +1,10 @@
-import {
-  intro,
-  outro,
-  text,
-  select,
-  log,
-  isCancel,
-  cancel,
-} from "@clack/prompts";
+import { intro, outro, text, log, isCancel, cancel } from "@clack/prompts";
 import puppeteer from "puppeteer";
-import { accessTheSite, login, searchForTheCompetition } from "./domHelpers";
+import { accessTheSite, login, accessTheCompetitionPage } from "./domHelpers";
 import { selectCommittees } from "./selectComittees";
-import { COMMITTEE_CODES } from "./constants";
+import open from "open";
+import { generateHtml } from "./results/generateHtml";
+import fs from "fs";
 
 async function main() {
   if (!process.env.EMAIL) {
@@ -44,20 +38,6 @@ async function main() {
     process.exit(0);
   }
 
-  // const comiteCode = (await select({
-  //   message: "Dans quel comité se situe la compétition ?",
-  //   options: Object.values(COMMITTEE_CODES).map((code) => ({
-  //     title: code,
-  //     value: code,
-  //   })),
-  // })) as string;
-
-  // if (isCancel(comiteCode)) {
-  //   cancel("Opération annulée.");
-  //   outro("Martin Constructions vous remercie pour votre confiance.");
-  //   process.exit(0);
-  // }
-
   // Launch browser
   const browser = await puppeteer.launch({
     headless: true,
@@ -74,9 +54,23 @@ async function main() {
   try {
     await accessTheSite(page);
     await login(page, process.env.EMAIL, process.env.PASSWORD);
-    const comiteCode = await searchForTheCompetition(page, competitionCode);
-    // await accessTheCompetitionPage(page, competitionCode);
-    await selectCommittees(page, comiteCode);
+    const { committeeCode } = await accessTheCompetitionPage(
+      page,
+      competitionCode
+    );
+
+    const { discipline, date, ...results } = await selectCommittees(
+      page,
+      committeeCode
+    );
+
+    const html = generateHtml(results, {
+      date,
+      discipline,
+    });
+    fs.writeFileSync("./results/results.html", html);
+    await open("./results/results.html");
+
     outro("Martin Constructions vous remercie pour votre confiance.");
   } catch (error) {
     console.error("Erreur lors du processus :", error);

@@ -10,3 +10,5 @@ export const COMMITTEE_CODES = {
   PE: "PE",
   CA: "CA",
 };
+
+export type CommitteeCode = keyof typeof COMMITTEE_CODES;

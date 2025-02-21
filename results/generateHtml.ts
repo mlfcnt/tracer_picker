@@ -1,0 +1,145 @@
+interface CommitteeEntry {
+  committee: string;
+  percentage: number;
+  count: number;
+  isHomeCommittee?: boolean;
+  picked?: boolean;
+}
+
+interface CommitteeResults {
+  manche1: CommitteeEntry[];
+  manche2: CommitteeEntry[];
+  manche3: CommitteeEntry[];
+  manche4: CommitteeEntry[];
+}
+
+interface CompetitionMetadata {
+  date: string;
+  discipline: string;
+}
+
+export const generateHtml = (
+  results: CommitteeResults,
+  competitionMetadata: CompetitionMetadata
+) => {
+  // Find home committee
+  const homeCommittee = results.manche1.find(
+    (r) => r.isHomeCommittee
+  )?.committee;
+
+  // Get all committees with their stats for each round
+  const getRoundStats = (manche: CommitteeEntry[]) => {
+    const selected = manche.filter((r) => r.isHomeCommittee || r.picked);
+    const notSelected = manche.filter((r) => !r.isHomeCommittee && !r.picked);
+    return { selected, notSelected };
+  };
+
+  return `
+    <!DOCTYPE html>
+    <html lang="fr">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Résultats Traceurs</title>
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+        <div class="header">
+            <h1>🎿 Attribution des Manches</h1>
+            <div class="competition-info">
+  }</p>
+            </div>
+            <p>Généré le ${new Date().toLocaleString("fr-FR")}</p>
+        </div>
+
+        <div class="general-info">
+            <h2>Informations Générales</h2>
+            <div class="info-card">
+                <p><strong>Comité Organisateur:</strong> ${homeCommittee}</p>
+                <p><strong>Discipline:</strong> ${
+                  competitionMetadata.discipline
+                }</p>
+                <p><strong>Date:</strong> ${competitionMetadata.date}</p>
+            </div>
+        </div>
+
+        <div class="manches-grid">
+            ${[
+              results.manche1,
+              results.manche2,
+              results.manche3,
+              results.manche4,
+            ]
+              .map((manche, index) => {
+                const { selected, notSelected } = getRoundStats(manche);
+                return `
+                <div class="manche-column">
+                    <h2>Manche ${index + 1} ${
+                  index % 2 === 0 ? "🏠" : "🎲"
+                }</h2>
+                    <div class="selected-committees">
+                        ${selected
+                          .map(
+                            (r) => `
+                            <div class="committee-card ${
+                              r.isHomeCommittee ? "home" : "picked"
+                            }">
+                                <div class="committee-name">${r.committee}</div>
+                                <div class="stats">
+                                    <span>${r.count} traceurs</span>
+                                    <span>${r.percentage}%</span>
+                                </div>
+                            </div>
+                        `
+                          )
+                          .join("")}
+                    </div>
+
+                    <button class="toggle-button" onclick="toggleNotSelected(${index})">
+                        Voir les comités non sélectionnés
+                    </button>
+
+                    <div id="not-selected-${index}" class="not-selected-committees hidden">
+                        <h3>Comités non sélectionnés</h3>
+                        ${notSelected
+                          .sort((a, b) => b.percentage - a.percentage)
+                          .map(
+                            (r) => `
+                            <div class="committee-card not-selected">
+                                <div class="committee-name">${r.committee}</div>
+                                <div class="stats">
+                                    <span>${r.count} traceurs</span>
+                                    <span>${r.percentage}%</span>
+                                </div>
+                            </div>
+                        `
+                          )
+                          .join("")}
+                    </div>
+                </div>
+                `;
+              })
+              .join("")}
+        </div>
+
+        <div class="timestamp">
+            <p>Martin Constructions - ${new Date().getFullYear()}</p>
+        </div>
+
+        <script>
+            function toggleNotSelected(mancheIndex) {
+                const element = document.getElementById('not-selected-' + mancheIndex);
+                const button = element.previousElementSibling;
+                if (element.classList.contains('hidden')) {
+                    element.classList.remove('hidden');
+                    button.textContent = 'Masquer les comités non sélectionnés';
+                } else {
+                    element.classList.add('hidden');
+                    button.textContent = 'Voir les comités non sélectionnés';
+                }
+            }
+        </script>
+    </body>
+    </html>
+  `;
+};

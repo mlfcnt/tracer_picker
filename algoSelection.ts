@@ -1,5 +1,7 @@
+import type { CommitteeCode } from "./constants";
+
 type CommitteeEntry = {
-  committee: string;
+  committee: CommitteeCode;
   percentage: number;
   count: number;
   isHomeCommittee?: boolean;
@@ -14,8 +16,8 @@ export type CommitteeResults = {
 };
 
 export const generateCommitteeResults = (
-  committeeCounts: Record<string, number>,
-  comiteCode: string
+  committeeCounts: Record<CommitteeCode, number>,
+  comiteCode: CommitteeCode
 ): CommitteeResults => {
   const nonHomeCommittees = Object.entries(committeeCounts).filter(
     ([c, count]) => c && c !== comiteCode && count > 0
@@ -61,8 +63,11 @@ export const performRandomDraw = (
   results: CommitteeResults
 ): CommitteeResults => {
   const pickFromWeightedList = (
-    choices: Array<{ percentage: number }>,
-    excludeCommittee?: string
+    choices: Array<{
+      percentage: number;
+      committee: CommitteeCode;
+    }>,
+    excludeCommittee?: CommitteeCode
   ) => {
     // Si on doit exclure un comité, on ajuste les pourcentages des autres
     const validChoices = excludeCommittee
