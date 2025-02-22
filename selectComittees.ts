@@ -14,48 +14,38 @@ export const countCompetitorsByCommittee = (committees: CommitteeCode[]) => {
 };
 
 export const formatResultsForDisplay = (results: CommitteeResults) => {
-  const allCommittees = new Set([
-    ...results.manche1.map((r) => r.committee),
-    ...results.manche2.map((r) => r.committee),
-  ]);
+  // Get all unique committees
+  const allCommittees = new Set<CommitteeCode>();
+  Object.values(results).forEach((committees) =>
+    committees.forEach((c) => allCommittees.add(c.committee))
+  );
 
-  return Array.from(allCommittees)
-    .map((committee) => {
-      const isHome = results.manche1.some(
-        (r) => r.committee === committee && r.isHomeCommittee
-      );
+  return Array.from(allCommittees).map((committee) => {
+    const row = {
+      Comité: committee,
+      M1: results.manche1.find((c) => c.committee === committee)?.picked
+        ? "✅"
+        : "-",
+      M2: results.manche2.find((c) => c.committee === committee)?.picked
+        ? "✅"
+        : "-",
+      M3: results.manche3.find((c) => c.committee === committee)?.picked
+        ? "✅"
+        : "-",
+      M4: results.manche4.find((c) => c.committee === committee)?.picked
+        ? "✅"
+        : "-",
+      Nb: results.manche2.find((c) => c.committee === committee)?.count || 0,
+      "%":
+        results.manche2.find((c) => c.committee === committee)?.percentage || 0,
+    };
+    return row;
+  });
+};
 
-      const entry = {
-        Comité: committee,
-        M1: "·",
-        M2: "·",
-        M3: "·",
-        M4: "·",
-        Nb: 0,
-        "%": 0,
-      };
-
-      // Check each round
-      if (isHome) {
-        entry["M1"] = "🏠";
-        entry["M3"] = "🏠";
-      }
-      if (results.manche2.some((r) => r.committee === committee && r.picked))
-        entry["M2"] = "🎲";
-      if (results.manche4.some((r) => r.committee === committee && r.picked))
-        entry["M4"] = "🎲";
-
-      const committeeData = [...results.manche1, ...results.manche2].find(
-        (r) => r.committee === committee
-      );
-      if (committeeData) {
-        entry["%"] = committeeData.percentage;
-        entry["Nb"] = committeeData.count;
-      }
-
-      return entry;
-    })
-    .sort((a, b) => b["%"] - a["%"]); // Tri par pourcentage décroissant
+export const displayResults = (results: CommitteeResults) => {
+  const formattedResults = formatResultsForDisplay(results);
+  console.table(formattedResults);
 };
 
 export const selectCommittees = async (

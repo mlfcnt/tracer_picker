@@ -1,5 +1,7 @@
+import type { CommitteeCode } from "../constants";
+
 interface CommitteeEntry {
-  committee: string;
+  committee: CommitteeCode;
   percentage: number;
   count: number;
   isHomeCommittee?: boolean;
@@ -20,13 +22,10 @@ interface CompetitionMetadata {
 
 export const generateHtml = (
   results: CommitteeResults,
-  competitionMetadata: CompetitionMetadata
+  competitionMetadata: CompetitionMetadata,
+  homeCommittee: CommitteeCode
 ) => {
-  // Find home committee
-  const homeCommittee = results.manche1.find(
-    (r) => r.isHomeCommittee
-  )?.committee;
-
+  // Determine header color based on discipline
   // Determine header color based on discipline
   const headerColor = (() => {
     switch (competitionMetadata.discipline) {
@@ -45,8 +44,8 @@ export const generateHtml = (
 
   // Get all committees with their stats for each round
   const getRoundStats = (manche: CommitteeEntry[]) => {
-    const selected = manche.filter((r) => r.isHomeCommittee || r.picked);
-    const notSelected = manche.filter((r) => !r.isHomeCommittee && !r.picked);
+    const selected = manche.filter((r) => r.picked);
+    const notSelected = manche.filter((r) => !r.picked);
     return { selected, notSelected };
   };
 
@@ -97,16 +96,12 @@ export const generateHtml = (
                 const { selected, notSelected } = getRoundStats(manche);
                 return `
                 <div class="manche-column">
-                    <h2>Manche ${index + 1} ${
-                  index % 2 === 0 ? "🏠" : "🎲"
-                }</h2>
+                    <h2>Manche ${index + 1} </h2>
                     <div class="selected-committees">
                         ${selected
                           .map(
                             (r) => `
-                            <div class="committee-card ${
-                              r.isHomeCommittee ? "home" : "picked"
-                            }">
+                            <div class="committee-card">
                                 <div class="committee-name">${r.committee}</div>
                                 <div class="stats">
                                     <span>${r.count} traceurs</span>

@@ -1,10 +1,25 @@
-import { intro, outro, text, log, isCancel, cancel } from "@clack/prompts";
+import {
+  intro,
+  outro,
+  text,
+  log,
+  isCancel,
+  cancel,
+  confirm,
+  select,
+} from "@clack/prompts";
 import puppeteer from "puppeteer";
 import { accessTheSite, login, accessTheCompetitionPage } from "./domHelpers";
-import { selectCommittees } from "./selectComittees";
+import {
+  displayResults,
+  formatResultsForDisplay,
+  selectCommittees,
+} from "./selectComittees";
 import open from "open";
 import { generateHtml } from "./results/generateHtml";
 import fs from "fs";
+import { COMMITTEE_CODES } from "./constants";
+import { updateManche } from "./updateManche";
 
 async function main() {
   if (!process.env.EMAIL) {
@@ -63,10 +78,42 @@ async function main() {
       page,
       committeeCode
     );
+    displayResults(results);
 
-    const html = generateHtml(results, {
+    let finalResults = results;
+    let isResultOk = false;
+
+    while (!isResultOk) {
+      isResultOk = (await confirm({
+        message: `Ces traceurs sont-ils ok ?`,
+      })) as boolean;
+
+      if (isResultOk) {
+        // save results to results_history.json
+        const formattedResults = {
+          competitionDate: date,
+          traceurs: {
+            manche1: finalResults.manche1.find((r) => r.picked)?.committee,
+            manche2: finalResults.manche2.find((r) => r.picked)?.committee,
+            manche3: finalResults.manche3.find((r) => r.picked)?.committee,
+            manche4: finalResults.manche4.find((r) => r.picked)?.committee,
+          },
+        };
+        fs.writeFileSync(
+          "./results/results_history.json",
+          JSON.stringify(formattedResults, null, 2)
+        );
+      } else {
+        const { updatedResults } = await updateManche(finalResults);
+        finalResults = updatedResults;
+        // displayResults(finalResults);
+      }
+    }
+
+    const html = generateHtml(finalResults, {
       date,
       discipline,
+      homeCommittee: committeeCode,
     });
 
     fs.writeFileSync("./results/results.html", html);

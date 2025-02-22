@@ -1,11 +1,12 @@
 import type { CommitteeCode } from "./constants";
 
-type CommitteeEntry = {
+export type CommitteeEntry = {
   committee: CommitteeCode;
   percentage: number;
   count: number;
   isHomeCommittee?: boolean;
   picked?: boolean;
+  isHandpicked?: boolean;
 };
 
 export type CommitteeResults = {
@@ -30,7 +31,7 @@ export const generateCommitteeResults = (
 
   // Calcul des probabilités pour manche 2 et 4
   const weightedProbabilities = nonHomeCommittees.map(([committee, count]) => ({
-    committee,
+    committee: committee as CommitteeCode,
     percentage: Math.round((count / totalNonHome) * 100) || 0,
     count,
   }));
@@ -44,6 +45,7 @@ export const generateCommitteeResults = (
         isHomeCommittee: true,
         count: homeCount,
         percentage: 100,
+        picked: true,
       },
     ],
     manche2: weightedProbabilities,
@@ -53,6 +55,7 @@ export const generateCommitteeResults = (
         isHomeCommittee: true,
         count: homeCount,
         percentage: 100,
+        picked: true,
       },
     ],
     manche4: weightedProbabilities,

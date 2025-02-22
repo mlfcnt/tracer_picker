@@ -1,4 +1,5 @@
 export const COMMITTEE_CODES = {
+  EQ: "EQ",
   SA: "SA",
   MB: "MB",
   AP: "AP",
@@ -9,6 +10,7 @@ export const COMMITTEE_CODES = {
   MJ: "MJ",
   PE: "PE",
   CA: "CA",
+  AU: "AU",
 };
 
 export type CommitteeCode = keyof typeof COMMITTEE_CODES;
