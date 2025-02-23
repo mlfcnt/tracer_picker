@@ -21,7 +21,7 @@ export const formatResultsForDisplay = (results: CommitteeResults) => {
   );
 
   const okSymbol = "OK";
-  const emptySymbol = "";
+  const emptySymbol = ".";
 
   return Array.from(allCommittees).map((committee) => {
     const row = {
