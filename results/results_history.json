@@ -1,10 +1,10 @@
 {
   "24/02/2025_sc_menuires_gs": {
     "traceurs": {
-      "manche1": "EQ",
-      "manche2": "ORS",
-      "manche3": "SA",
-      "manche4": "AU"
+      "manche1": "SA",
+      "manche2": "EQ",
+      "manche3": "EQ",
+      "manche4": "SA"
     }
   },
   "24/02/2025_sc_morz_avo_sl": {
@@ -13,6 +13,14 @@
       "manche2": "SA",
       "manche3": "MB",
       "manche4": "ORS"
+    }
+  },
+  "25/02/2025_sc_morz_avo_sl": {
+    "traceurs": {
+      "manche1": "MB",
+      "manche2": "AP",
+      "manche3": "MB",
+      "manche4": "APEX"
     }
   }
 }
