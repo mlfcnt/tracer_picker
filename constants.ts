@@ -14,3 +14,8 @@ export const COMMITTEE_CODES = {
 };
 
 export type CommitteeCode = keyof typeof COMMITTEE_CODES;
+
+export const EXTRA_COMMITTEES_COUNT: Partial<Record<CommitteeCode, number>> = {
+  APEX: 6,
+  ORS: 20,
+};

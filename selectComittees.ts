@@ -4,6 +4,7 @@ import {
   type CommitteeResults,
 } from "./algoSelection";
 import type { CommitteeCode } from "./constants";
+import { EXTRA_COMMITTEES_COUNT } from "./constants";
 
 export const countCompetitorsByCommittee = (committees: CommitteeCode[]) => {
   return committees.reduce((acc, committee) => {
@@ -74,6 +75,13 @@ export const selectCommittees = async (
   })) as CommitteeCode[];
 
   const committeeCounts = countCompetitorsByCommittee(committeesData);
+
+  // Ajout des comités artificiels
+  Object.entries(EXTRA_COMMITTEES_COUNT).forEach(([committee, count]) => {
+    committeeCounts[committee as CommitteeCode] =
+      (committeeCounts[committee as CommitteeCode] || 0) + count;
+  });
+
   const results = generateCommitteeResults(committeeCounts, comiteCode);
   return {
     ...results,

@@ -29,12 +29,22 @@ export const updateManche = async (results: CommitteeResults) => {
             {
               committee: newCommitteeCode as CommitteeCode,
               count:
+                results.manche1.find(
+                  (c) => c.committee === newCommitteeCode && c.isHomeCommittee
+                )?.count ||
                 results.manche1.find((c) => c.committee === newCommitteeCode)
-                  ?.count || 0,
+                  ?.count ||
+                0,
               percentage:
+                results.manche1.find(
+                  (c) => c.committee === newCommitteeCode && c.isHomeCommittee
+                )?.percentage ||
                 results.manche1.find((c) => c.committee === newCommitteeCode)
-                  ?.percentage || 0,
-              isHomeCommittee: false,
+                  ?.percentage ||
+                0,
+              isHomeCommittee:
+                results.manche1.find((c) => c.committee === newCommitteeCode)
+                  ?.isHomeCommittee || false,
               picked: true,
               isHandpicked: true,
             },
@@ -52,11 +62,22 @@ export const updateManche = async (results: CommitteeResults) => {
             {
               committee: newCommitteeCode as CommitteeCode,
               count:
+                results.manche2.find(
+                  (c) => c.committee === newCommitteeCode && c.isHomeCommittee
+                )?.count ||
                 results.manche2.find((c) => c.committee === newCommitteeCode)
-                  ?.count || 0,
+                  ?.count ||
+                0,
               percentage:
+                results.manche2.find(
+                  (c) => c.committee === newCommitteeCode && c.isHomeCommittee
+                )?.percentage ||
                 results.manche2.find((c) => c.committee === newCommitteeCode)
-                  ?.percentage || 0,
+                  ?.percentage ||
+                0,
+              isHomeCommittee:
+                results.manche2.find((c) => c.committee === newCommitteeCode)
+                  ?.isHomeCommittee || false,
               picked: true,
               isHandpicked: true,
             },
@@ -74,11 +95,22 @@ export const updateManche = async (results: CommitteeResults) => {
             {
               committee: newCommitteeCode as CommitteeCode,
               count:
+                results.manche3.find(
+                  (c) => c.committee === newCommitteeCode && c.isHomeCommittee
+                )?.count ||
                 results.manche3.find((c) => c.committee === newCommitteeCode)
-                  ?.count || 0,
+                  ?.count ||
+                0,
               percentage:
+                results.manche3.find(
+                  (c) => c.committee === newCommitteeCode && c.isHomeCommittee
+                )?.percentage ||
                 results.manche3.find((c) => c.committee === newCommitteeCode)
-                  ?.percentage || 0,
+                  ?.percentage ||
+                0,
+              isHomeCommittee:
+                results.manche3.find((c) => c.committee === newCommitteeCode)
+                  ?.isHomeCommittee || false,
               picked: true,
               isHandpicked: true,
             },
@@ -96,11 +128,22 @@ export const updateManche = async (results: CommitteeResults) => {
             {
               committee: newCommitteeCode as CommitteeCode,
               count:
+                results.manche4.find(
+                  (c) => c.committee === newCommitteeCode && c.isHomeCommittee
+                )?.count ||
                 results.manche4.find((c) => c.committee === newCommitteeCode)
-                  ?.count || 0,
+                  ?.count ||
+                0,
               percentage:
+                results.manche4.find(
+                  (c) => c.committee === newCommitteeCode && c.isHomeCommittee
+                )?.percentage ||
                 results.manche4.find((c) => c.committee === newCommitteeCode)
-                  ?.percentage || 0,
+                  ?.percentage ||
+                0,
+              isHomeCommittee:
+                results.manche4.find((c) => c.committee === newCommitteeCode)
+                  ?.isHomeCommittee || false,
               picked: true,
               isHandpicked: true,
             },
