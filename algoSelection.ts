@@ -48,6 +48,11 @@ const calculateHistoricalWeights = (
     const date = new Date(dateStr);
     date.setHours(0, 0, 0, 0);
 
+    // Ignorer les dates futures
+    if (date > now) {
+      return;
+    }
+
     Object.values(data.traceurs).forEach((committee) => {
       occurrences.set(committee, (occurrences.get(committee) || 0) + 1);
       const currentLastDate = lastSelection.get(committee);

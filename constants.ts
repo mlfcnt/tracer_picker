@@ -19,3 +19,8 @@ export const EXTRA_COMMITTEES_COUNT: Partial<Record<CommitteeCode, number>> = {
   APEX: 6,
   ORS: 20,
 };
+
+export const SEASON_DATES = {
+  start: "15/10/2024",
+  end: "30/04/2025",
+};

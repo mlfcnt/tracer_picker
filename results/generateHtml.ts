@@ -110,7 +110,7 @@ export const generateHtml = (
                                 <div class="committee-name">${r.committee}</div>
                                 <div class="stats">
                                     <span>${r.count} coureurs</span>
-                                    <span>${r.percentage}%</span>
+                                    <span>${r.percentage.toFixed(0)}%</span>
                                 </div>
                             </div>
                         `
@@ -133,7 +133,7 @@ export const generateHtml = (
                                 <div class="stats">
                                     <span>${r.count} coureurs
                                     </span>
-                                    <span>${r.percentage}%</span>
+                                    <span>${r.percentage.toFixed(0)}%</span>
                                 </div>
                             </div>
                         `

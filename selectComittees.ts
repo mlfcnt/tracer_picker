@@ -102,8 +102,6 @@ export const selectCommittees = async (
     )
   );
 
-  console.log({ historyData });
-
   const results = generateCommitteeResults(
     committeeCounts,
     comiteCode,
