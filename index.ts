@@ -63,7 +63,7 @@ async function main() {
   const customOptions: any = {};
 
   if (process.env.USE_SLOMO) {
-    customOptions.slowMo = 50;
+    customOptions.slowMo = 15;
   }
 
   // Launch browser

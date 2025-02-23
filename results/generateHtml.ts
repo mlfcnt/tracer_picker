@@ -31,7 +31,7 @@ export const generateHtml = (
   const headerColor = (() => {
     switch (competitionMetadata.discipline) {
       case "GS":
-        return "pink";
+        return "#ed8bea";
       case "SL":
         return "blue";
       case "SG":
@@ -68,44 +68,28 @@ export const generateHtml = (
         <div class="header">
             <h1>🎿 Attribution des Manches</h1>
             <div class="competition-info">
-                <p>${competitionMetadata.discipline} - ${
-    competitionMetadata.date
-  } - ${competitionMetadata.location}</p>
+                <p>${competitionMetadata.discipline} - ${competitionMetadata.date
+    } - ${competitionMetadata.location}</p>
             </div>
             <p>Généré le ${new Date().toLocaleString("fr-FR")}</p>
         </div>
 
-        <div class="general-info">
-            <h2>Informations Générales</h2>
-            <div class="info-card">
-                <p><strong>Comité Organisateur:</strong> ${
-                  competitionMetadata.homeCommittee
-                }</p>
-                <p><strong>Discipline:</strong> ${
-                  competitionMetadata.discipline
-                }</p>
-                <p><strong>Date:</strong> ${competitionMetadata.date}</p>
-                <p><strong>Lieu:</strong> ${competitionMetadata.location}</p>
-
-            </div>
-        </div>
-
         <div class="manches-grid">
             ${[
-              results.manche1,
-              results.manche2,
-              results.manche3,
-              results.manche4,
-            ]
-              .map((manche, index) => {
-                const { selected, notSelected } = getRoundStats(manche);
-                return `
+      results.manche1,
+      results.manche2,
+      results.manche3,
+      results.manche4,
+    ]
+      .map((manche, index) => {
+        const { selected, notSelected } = getRoundStats(manche);
+        return `
                 <div class="manche-column">
                     <h2>Manche ${index + 1} </h2>
                     <div class="selected-committees">
                         ${selected
-                          .map(
-                            (r) => `
+            .map(
+              (r) => `
                             <div class="committee-card">
                                 <div class="committee-name">${r.committee}</div>
                                 <div class="stats">
@@ -114,8 +98,8 @@ export const generateHtml = (
                                 </div>
                             </div>
                         `
-                          )
-                          .join("")}
+            )
+            .join("")}
                     </div>
 
                     <button class="toggle-button" onclick="toggleNotSelected(${index})">
@@ -125,9 +109,9 @@ export const generateHtml = (
                     <div id="not-selected-${index}" class="not-selected-committees hidden">
                         <h3>Comités non sélectionnés</h3>
                         ${notSelected
-                          .sort((a, b) => b.percentage - a.percentage)
-                          .map(
-                            (r) => `
+            .sort((a, b) => b.percentage - a.percentage)
+            .map(
+              (r) => `
                             <div class="committee-card not-selected">
                                 <div class="committee-name">${r.committee}</div>
                                 <div class="stats">
@@ -137,13 +121,13 @@ export const generateHtml = (
                                 </div>
                             </div>
                         `
-                          )
-                          .join("")}
+            )
+            .join("")}
                     </div>
                 </div>
                 `;
-              })
-              .join("")}
+      })
+      .join("")}
         </div>
 
         <div class="timestamp">
