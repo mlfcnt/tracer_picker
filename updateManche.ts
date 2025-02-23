@@ -22,7 +22,6 @@ export const updateManche = async (results: CommitteeResults) => {
     })),
   });
 
-  console.log({ mancheToChange, newCommitteeCode });
   const updatedResults: CommitteeResults = {
     manche1:
       mancheToChange === "manche1"
