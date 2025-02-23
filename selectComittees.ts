@@ -16,33 +16,42 @@ export const countCompetitorsByCommittee = (committees: CommitteeCode[]) => {
 };
 
 export const formatResultsForDisplay = (results: CommitteeResults) => {
-  const allCommittees = new Set<CommitteeCode>();
+  const okSymbol = "✓";
+  const selectedCommittees = new Set<CommitteeCode>();
+
+  // Récupère uniquement les comités sélectionnés
   Object.values(results).forEach((committees) =>
-    committees.forEach((c) => allCommittees.add(c.committee))
+    committees
+      .filter((c) => c.isPicked)
+      .forEach((c) => selectedCommittees.add(c.committee))
   );
 
-  const okSymbol = "OK";
-  const emptySymbol = ".";
-
-  return Array.from(allCommittees).map((committee) => {
+  return Array.from(selectedCommittees).map((committee) => {
     const entry = results.manche2.find((c) => c.committee === committee);
+    const weight = entry?.weight || 1;
+    const baseWeight = entry?.baseWeight || 1;
 
     return {
       Comité: committee,
       M1: results.manche1.find((c) => c.committee === committee)?.isPicked
         ? okSymbol
-        : emptySymbol,
+        : "",
       M2: results.manche2.find((c) => c.committee === committee)?.isPicked
         ? okSymbol
-        : emptySymbol,
+        : "",
       M3: results.manche3.find((c) => c.committee === committee)?.isPicked
         ? okSymbol
-        : emptySymbol,
+        : "",
       M4: results.manche4.find((c) => c.committee === committee)?.isPicked
         ? okSymbol
-        : emptySymbol,
-      Nb: entry?.count || 0,
+        : "",
+      Compétiteurs: entry?.count || 0,
       "Courses depuis": entry?.competitionsSinceLastTrace || 0,
+      "Poids base": baseWeight.toFixed(2),
+      "Poids final": weight.toFixed(2),
+      Formule: `${entry?.count || 0} × ${baseWeight.toFixed(
+        2
+      )} = ${weight.toFixed(2)}`,
       Occurences: entry?.occurrences || 0,
       "%": entry?.percentage?.toFixed(1) || 0,
     };

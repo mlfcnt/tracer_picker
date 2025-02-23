@@ -11,6 +11,8 @@ export type CommitteeEntry = {
   lastDate?: Date;
   occurrences?: number;
   competitionsSinceLastTrace?: number;
+  weight?: number;
+  baseWeight?: number;
 };
 
 export type CommitteeResults = {
