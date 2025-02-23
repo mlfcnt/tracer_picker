@@ -95,8 +95,8 @@ const calculateHistoricalWeights = (
           ) ** ALGO_WEIGHT_KNOBS.COMPETITIONS_SINCE_LAST_TRACE_POWER
         : 1;
 
-    const newPercentage =
-      basePercentage * occurrenceWeight * competitionsWeight;
+    const baseWeight = occurrenceWeight * competitionsWeight;
+    const newPercentage = basePercentage * baseWeight;
 
     console.log(`
       Comité ${entry.committee}:
@@ -117,6 +117,8 @@ const calculateHistoricalWeights = (
         entry.committee
       ),
       occurrences: occurrences.get(entry.committee) || 0,
+      weight: newPercentage,
+      baseWeight,
     };
   });
 };
