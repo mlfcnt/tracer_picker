@@ -21,22 +21,23 @@ export const formatResultsForDisplay = (results: CommitteeResults) => {
   );
 
   const okSymbol = "OK";
+  const emptySymbol = "";
 
   return Array.from(allCommittees).map((committee) => {
     const row = {
       Comité: committee,
       M1: results.manche1.find((c) => c.committee === committee)?.picked
         ? okSymbol
-        : "-",
+        : emptySymbol,
       M2: results.manche2.find((c) => c.committee === committee)?.picked
         ? okSymbol
-        : "-",
+        : emptySymbol,
       M3: results.manche3.find((c) => c.committee === committee)?.picked
         ? okSymbol
-        : "-",
+        : emptySymbol,
       M4: results.manche4.find((c) => c.committee === committee)?.picked
         ? okSymbol
-        : "-",
+        : emptySymbol,
       Nb: results.manche2.find((c) => c.committee === committee)?.count || 0,
       "%":
         results.manche2.find((c) => c.committee === committee)?.percentage || 0,
