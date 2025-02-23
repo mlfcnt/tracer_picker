@@ -1,1 +1,10 @@
-{}
+{
+  "20/01/2025_sportin_vars_gs": {
+    "traceurs": {
+      "manche1": "AP",
+      "manche2": "ORS",
+      "manche3": "AP",
+      "manche4": "SA"
+    }
+  }
+}
