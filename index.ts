@@ -100,7 +100,7 @@ async function main() {
 
     while (!isResultOk) {
       isResultOk = (await confirm({
-        message: `Ces traceurs sont-ils ok ?`,
+        message: `Proposition validé ?`,
       })) as boolean;
 
       if (isResultOk) {
