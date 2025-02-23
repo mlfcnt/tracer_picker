@@ -20,20 +20,22 @@ export const formatResultsForDisplay = (results: CommitteeResults) => {
     committees.forEach((c) => allCommittees.add(c.committee))
   );
 
+  const okSymbol = "OK";
+
   return Array.from(allCommittees).map((committee) => {
     const row = {
       Comité: committee,
       M1: results.manche1.find((c) => c.committee === committee)?.picked
-        ? "✓"
+        ? okSymbol
         : "-",
       M2: results.manche2.find((c) => c.committee === committee)?.picked
-        ? "✓"
+        ? okSymbol
         : "-",
       M3: results.manche3.find((c) => c.committee === committee)?.picked
-        ? "✓"
+        ? okSymbol
         : "-",
       M4: results.manche4.find((c) => c.committee === committee)?.picked
-        ? "✓"
+        ? okSymbol
         : "-",
       Nb: results.manche2.find((c) => c.committee === committee)?.count || 0,
       "%":
