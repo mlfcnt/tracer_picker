@@ -1,296 +1,307 @@
+<!DOCTYPE html>
+<html lang="fr">
 
-    <!DOCTYPE html>
-    <html lang="fr">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Résultats Traceurs</title>
-        <link rel="stylesheet" href="style.css">
-        <style>
-          .header {
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Résultats Traceurs</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .header {
             background-color: pink;
-          }
-        </style>
-    </head>
-    <body>
-        <div class="header">
-            <h1>🎿 Attribution des Manches</h1>
-            <div class="competition-info">
-                <p>GS - 24/02/2025</p>
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header">
+        <h1>🎿 Attribution des Manches</h1>
+        <div class="competition-info">
+            <p>GS - 24/02/2025 - SC MENUIRES</p>
+        </div>
+        <p>Généré le 22/02/2025 08:07:12</p>
+    </div>
+
+    <div class="general-info">
+        <h2>Informations Générales</h2>
+        <div class="info-card">
+            <p><strong>Comité Organisateur:</strong> SA</p>
+            <p><strong>Discipline:</strong> GS</p>
+            <p><strong>Date:</strong> 24/02/2025</p>
+            <p><strong>Lieu:</strong> SC MENUIRES</p>
+
+        </div>
+    </div>
+
+    <div class="manches-grid">
+
+        <div class="manche-column">
+            <h2>Manche 1 </h2>
+            <div class="selected-committees">
+
+                <div class="committee-card home">
+                    <div class="committee-name">SA</div>
+                    <div class="stats">
+                        <span>51 coureurs</span>
+                        <span>100%</span>
+                    </div>
+                </div>
+
             </div>
-            <p>Généré le 22/02/2025 15:27:41</p>
-        </div>
 
-        <div class="general-info">
-            <h2>Informations Générales</h2>
-            <div class="info-card">
-                <p><strong>Comité Organisateur:</strong> undefined</p>
-                <p><strong>Discipline:</strong> GS</p>
-                <p><strong>Date:</strong> 24/02/2025</p>
+            <button class="toggle-button" onclick="toggleNotSelected(0)">
+                Voir les comités non sélectionnés
+            </button>
+
+            <div id="not-selected-0" class="not-selected-committees hidden">
+                <h3>Comités non sélectionnés</h3>
+
+                <div class="committee-card not-selected">
+                    <div class="committee-name">SA</div>
+                    <div class="stats">
+                        <span>51 traceurs</span>
+                        <span>100%</span>
+                    </div>
+                </div>
+
             </div>
         </div>
 
-        <div class="manches-grid">
-            
-                <div class="manche-column">
-                    <h2>Manche 1 </h2>
-                    <div class="selected-committees">
-                        
-                            <div class="committee-card">
-                                <div class="committee-name">EQ</div>
-                                <div class="stats">
-                                    <span>0 traceurs</span>
-                                    <span>0%</span>
-                                </div>
-                            </div>
-                        
-                    </div>
+        <div class="manche-column">
+            <h2>Manche 2 </h2>
+            <div class="selected-committees">
 
-                    <button class="toggle-button" onclick="toggleNotSelected(0)">
-                        Voir les comités non sélectionnés
-                    </button>
-
-                    <div id="not-selected-0" class="not-selected-committees hidden">
-                        <h3>Comités non sélectionnés</h3>
-                        
-                            <div class="committee-card not-selected">
-                                <div class="committee-name">SA</div>
-                                <div class="stats">
-                                    <span>51 traceurs</span>
-                                    <span>100%</span>
-                                </div>
-                            </div>
-                        
+                <div class="committee-card picked">
+                    <div class="committee-name">MB</div>
+                    <div class="stats">
+                        <span>20 coureurs</span>
+                        <span>39%</span>
                     </div>
                 </div>
-                
-                <div class="manche-column">
-                    <h2>Manche 2 </h2>
-                    <div class="selected-committees">
-                        
-                            <div class="committee-card">
-                                <div class="committee-name">SA</div>
-                                <div class="stats">
-                                    <span>0 traceurs</span>
-                                    <span>0%</span>
-                                </div>
-                            </div>
-                        
-                    </div>
 
-                    <button class="toggle-button" onclick="toggleNotSelected(1)">
-                        Voir les comités non sélectionnés
-                    </button>
+            </div>
 
-                    <div id="not-selected-1" class="not-selected-committees hidden">
-                        <h3>Comités non sélectionnés</h3>
-                        
-                            <div class="committee-card not-selected">
-                                <div class="committee-name">MB</div>
-                                <div class="stats">
-                                    <span>20 traceurs</span>
-                                    <span>40%</span>
-                                </div>
-                            </div>
-                        
-                            <div class="committee-card not-selected">
-                                <div class="committee-name">AP</div>
-                                <div class="stats">
-                                    <span>10 traceurs</span>
-                                    <span>20%</span>
-                                </div>
-                            </div>
-                        
-                            <div class="committee-card not-selected">
-                                <div class="committee-name">EQ</div>
-                                <div class="stats">
-                                    <span>4 traceurs</span>
-                                    <span>8%</span>
-                                </div>
-                            </div>
-                        
-                            <div class="committee-card not-selected">
-                                <div class="committee-name">DA</div>
-                                <div class="stats">
-                                    <span>4 traceurs</span>
-                                    <span>8%</span>
-                                </div>
-                            </div>
-                        
-                            <div class="committee-card not-selected">
-                                <div class="committee-name">MJ</div>
-                                <div class="stats">
-                                    <span>4 traceurs</span>
-                                    <span>8%</span>
-                                </div>
-                            </div>
-                        
-                            <div class="committee-card not-selected">
-                                <div class="committee-name">PE</div>
-                                <div class="stats">
-                                    <span>3 traceurs</span>
-                                    <span>6%</span>
-                                </div>
-                            </div>
-                        
-                            <div class="committee-card not-selected">
-                                <div class="committee-name">AU</div>
-                                <div class="stats">
-                                    <span>2 traceurs</span>
-                                    <span>4%</span>
-                                </div>
-                            </div>
-                        
-                            <div class="committee-card not-selected">
-                                <div class="committee-name">CA</div>
-                                <div class="stats">
-                                    <span>2 traceurs</span>
-                                    <span>4%</span>
-                                </div>
-                            </div>
-                        
-                            <div class="committee-card not-selected">
-                                <div class="committee-name">MV</div>
-                                <div class="stats">
-                                    <span>1 traceurs</span>
-                                    <span>2%</span>
-                                </div>
-                            </div>
-                        
+            <button class="toggle-button" onclick="toggleNotSelected(1)">
+                Voir les comités non sélectionnés
+            </button>
+
+            <div id="not-selected-1" class="not-selected-committees hidden">
+                <h3>Comités non sélectionnés</h3>
+
+                <div class="committee-card not-selected">
+                    <div class="committee-name">AP</div>
+                    <div class="stats">
+                        <span>11 coureurs
+                        </span>
+                        <span>22%</span>
                     </div>
                 </div>
-                
-                <div class="manche-column">
-                    <h2>Manche 3 </h2>
-                    <div class="selected-committees">
-                        
-                            <div class="committee-card">
-                                <div class="committee-name">SA</div>
-                                <div class="stats">
-                                    <span>51 traceurs</span>
-                                    <span>100%</span>
-                                </div>
-                            </div>
-                        
-                    </div>
 
-                    <button class="toggle-button" onclick="toggleNotSelected(2)">
-                        Voir les comités non sélectionnés
-                    </button>
-
-                    <div id="not-selected-2" class="not-selected-committees hidden">
-                        <h3>Comités non sélectionnés</h3>
-                        
+                <div class="committee-card not-selected">
+                    <div class="committee-name">EQ</div>
+                    <div class="stats">
+                        <span>4 coureurs
+                        </span>
+                        <span>8%</span>
                     </div>
                 </div>
-                
-                <div class="manche-column">
-                    <h2>Manche 4 </h2>
-                    <div class="selected-committees">
-                        
-                            <div class="committee-card">
-                                <div class="committee-name">DA</div>
-                                <div class="stats">
-                                    <span>4 traceurs</span>
-                                    <span>8%</span>
-                                </div>
-                            </div>
-                        
-                    </div>
 
-                    <button class="toggle-button" onclick="toggleNotSelected(3)">
-                        Voir les comités non sélectionnés
-                    </button>
-
-                    <div id="not-selected-3" class="not-selected-committees hidden">
-                        <h3>Comités non sélectionnés</h3>
-                        
-                            <div class="committee-card not-selected">
-                                <div class="committee-name">MB</div>
-                                <div class="stats">
-                                    <span>20 traceurs</span>
-                                    <span>40%</span>
-                                </div>
-                            </div>
-                        
-                            <div class="committee-card not-selected">
-                                <div class="committee-name">AP</div>
-                                <div class="stats">
-                                    <span>10 traceurs</span>
-                                    <span>20%</span>
-                                </div>
-                            </div>
-                        
-                            <div class="committee-card not-selected">
-                                <div class="committee-name">EQ</div>
-                                <div class="stats">
-                                    <span>4 traceurs</span>
-                                    <span>8%</span>
-                                </div>
-                            </div>
-                        
-                            <div class="committee-card not-selected">
-                                <div class="committee-name">MJ</div>
-                                <div class="stats">
-                                    <span>4 traceurs</span>
-                                    <span>8%</span>
-                                </div>
-                            </div>
-                        
-                            <div class="committee-card not-selected">
-                                <div class="committee-name">PE</div>
-                                <div class="stats">
-                                    <span>3 traceurs</span>
-                                    <span>6%</span>
-                                </div>
-                            </div>
-                        
-                            <div class="committee-card not-selected">
-                                <div class="committee-name">AU</div>
-                                <div class="stats">
-                                    <span>2 traceurs</span>
-                                    <span>4%</span>
-                                </div>
-                            </div>
-                        
-                            <div class="committee-card not-selected">
-                                <div class="committee-name">CA</div>
-                                <div class="stats">
-                                    <span>2 traceurs</span>
-                                    <span>4%</span>
-                                </div>
-                            </div>
-                        
-                            <div class="committee-card not-selected">
-                                <div class="committee-name">MV</div>
-                                <div class="stats">
-                                    <span>1 traceurs</span>
-                                    <span>2%</span>
-                                </div>
-                            </div>
-                        
+                <div class="committee-card not-selected">
+                    <div class="committee-name">DA</div>
+                    <div class="stats">
+                        <span>4 coureurs
+                        </span>
+                        <span>8%</span>
                     </div>
                 </div>
-                
+
+                <div class="committee-card not-selected">
+                    <div class="committee-name">MJ</div>
+                    <div class="stats">
+                        <span>4 coureurs
+                        </span>
+                        <span>8%</span>
+                    </div>
+                </div>
+
+                <div class="committee-card not-selected">
+                    <div class="committee-name">PE</div>
+                    <div class="stats">
+                        <span>3 coureurs
+                        </span>
+                        <span>6%</span>
+                    </div>
+                </div>
+
+                <div class="committee-card not-selected">
+                    <div class="committee-name">AU</div>
+                    <div class="stats">
+                        <span>2 coureurs
+                        </span>
+                        <span>4%</span>
+                    </div>
+                </div>
+
+                <div class="committee-card not-selected">
+                    <div class="committee-name">CA</div>
+                    <div class="stats">
+                        <span>2 coureurs
+                        </span>
+                        <span>4%</span>
+                    </div>
+                </div>
+
+                <div class="committee-card not-selected">
+                    <div class="committee-name">MV</div>
+                    <div class="stats">
+                        <span>1 coureurs
+                        </span>
+                        <span>2%</span>
+                    </div>
+                </div>
+
+            </div>
         </div>
 
-        <div class="timestamp">
-            <p>Martin Constructions - 2025</p>
+        <div class="manche-column">
+            <h2>Manche 3 </h2>
+            <div class="selected-committees">
+
+                <div class="committee-card home">
+                    <div class="committee-name">SA</div>
+                    <div class="stats">
+                        <span>51 coureurs</span>
+                        <span>100%</span>
+                    </div>
+                </div>
+
+            </div>
+
+            <button class="toggle-button" onclick="toggleNotSelected(2)">
+                Voir les comités non sélectionnés
+            </button>
+
+            <div id="not-selected-2" class="not-selected-committees hidden">
+                <h3>Comités non sélectionnés</h3>
+
+            </div>
         </div>
 
-        <script>
-            function toggleNotSelected(mancheIndex) {
-                const element = document.getElementById('not-selected-' + mancheIndex);
-                const button = element.previousElementSibling;
-                if (element.classList.contains('hidden')) {
-                    element.classList.remove('hidden');
-                    button.textContent = 'Masquer les comités non sélectionnés';
-                } else {
-                    element.classList.add('hidden');
-                    button.textContent = 'Voir les comités non sélectionnés';
-                }
+        <div class="manche-column">
+            <h2>Manche 4 </h2>
+            <div class="selected-committees">
+
+                <div class="committee-card picked">
+                    <div class="committee-name">AP</div>
+                    <div class="stats">
+                        <span>11 coureurs</span>
+                        <span>22%</span>
+                    </div>
+                </div>
+
+            </div>
+
+            <button class="toggle-button" onclick="toggleNotSelected(3)">
+                Voir les comités non sélectionnés
+            </button>
+
+            <div id="not-selected-3" class="not-selected-committees hidden">
+                <h3>Comités non sélectionnés</h3>
+
+                <div class="committee-card not-selected">
+                    <div class="committee-name">MB</div>
+                    <div class="stats">
+                        <span>20 coureurs
+                        </span>
+                        <span>39%</span>
+                    </div>
+                </div>
+
+                <div class="committee-card not-selected">
+                    <div class="committee-name">EQ</div>
+                    <div class="stats">
+                        <span>4 coureurs
+                        </span>
+                        <span>8%</span>
+                    </div>
+                </div>
+
+                <div class="committee-card not-selected">
+                    <div class="committee-name">EQ</div>
+                    <div class="stats">
+                        <span>4 coureurs
+                        </span>
+                        <span>8%</span>
+                    </div>
+                </div>
+
+                <div class="committee-card not-selected">
+                    <div class="committee-name">MJ</div>
+                    <div class="stats">
+                        <span>4 coureurs
+                        </span>
+                        <span>8%</span>
+                    </div>
+                </div>
+
+                <div class="committee-card not-selected">
+                    <div class="committee-name">PE</div>
+                    <div class="stats">
+                        <span>3 coureurs
+                        </span>
+                        <span>6%</span>
+                    </div>
+                </div>
+
+                <div class="committee-card not-selected">
+                    <div class="committee-name">AU</div>
+                    <div class="stats">
+                        <span>2 coureurs
+                        </span>
+                        <span>4%</span>
+                    </div>
+                </div>
+
+                <div class="committee-card not-selected">
+                    <div class="committee-name">CA</div>
+                    <div class="stats">
+                        <span>2 coureurs
+                        </span>
+                        <span>4%</span>
+                    </div>
+                </div>
+
+                <div class="committee-card not-selected">
+                    <div class="committee-name">MV</div>
+                    <div class="stats">
+                        <span>1 coureurs
+                        </span>
+                        <span>2%</span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <div class="timestamp">
+        <p>Martin Constructions - 2025</p>
+    </div>
+
+    <script>
+        function toggleNotSelected(mancheIndex) {
+            const element = document.getElementById('not-selected-' + mancheIndex);
+            const button = element.previousElementSibling;
+            if (element.classList.contains('hidden')) {
+                element.classList.remove('hidden');
+                button.textContent = 'Masquer les comités non sélectionnés';
+            } else {
+                element.classList.add('hidden');
+                button.textContent = 'Voir les comités non sélectionnés';
             }
-        </script>
-    </body>
-    </html>
-  
+        }
+    </script>
+</body>
+
+</html>

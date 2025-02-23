@@ -56,6 +56,7 @@ async function main() {
   // Launch browser
   const browser = await puppeteer.launch({
     headless: true,
+    slowMo: 50,
     defaultViewport: {
       width: 1920,
       height: 1080,
@@ -74,7 +75,7 @@ async function main() {
       competitionCode
     );
 
-    const { discipline, date, ...results } = await selectCommittees(
+    const { discipline, date, location, ...results } = await selectCommittees(
       page,
       committeeCode
     );
@@ -113,7 +114,8 @@ async function main() {
     const html = generateHtml(finalResults, {
       date,
       discipline,
-      homeCommittee: committeeCode,
+      location,
+      homeCommittee: committeeCode
     });
 
     fs.writeFileSync("./results/results.html", html);

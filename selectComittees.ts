@@ -58,11 +58,14 @@ export const selectCommittees = async (
         .querySelector("#container_info_competition h2")
         ?.textContent?.trim() || "";
 
+    const location = titre.split("(")[1].split('-')[0].trim()
+
     const discipline = titre.split("-")[1].slice(0, 2);
     const date = titre.split("du")[1].split(",")[0].trim();
     return {
       discipline,
       date,
+      location
     };
   });
 
