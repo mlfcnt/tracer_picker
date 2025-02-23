@@ -132,10 +132,22 @@ async function main() {
           },
         };
 
+        // Sort history by date
+        const sortedHistory = Object.fromEntries(
+          Object.entries(history).sort(([dateA], [dateB]) => {
+            const [dayA, monthA, yearA] = dateA.split("_")[0].split("/");
+            const [dayB, monthB, yearB] = dateB.split("_")[0].split("/");
+            return (
+              new Date(`${yearA}-${monthA}-${dayA}`).getTime() -
+              new Date(`${yearB}-${monthB}-${dayB}`).getTime()
+            );
+          })
+        );
+
         // Save updated history
         fs.writeFileSync(
           "./results/results_history.json",
-          JSON.stringify(history, null, 2)
+          JSON.stringify(sortedHistory, null, 2)
         );
       } else {
         const { updatedResults } = await updateManche(finalResults);

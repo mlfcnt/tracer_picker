@@ -23,16 +23,9 @@ export const formatResultsForDisplay = (results: CommitteeResults) => {
 
   const okSymbol = "OK";
   const emptySymbol = ".";
-  const rtf = new Intl.RelativeTimeFormat("fr", { numeric: "auto" });
 
   return Array.from(allCommittees).map((committee) => {
     const entry = results.manche2.find((c) => c.committee === committee);
-    const daysDiff = entry?.lastDate
-      ? Math.round(
-          (new Date().getTime() - entry.lastDate.getTime()) /
-            (1000 * 60 * 60 * 24)
-        )
-      : null;
 
     return {
       Comité: committee,
@@ -49,7 +42,7 @@ export const formatResultsForDisplay = (results: CommitteeResults) => {
         ? okSymbol
         : emptySymbol,
       Nb: entry?.count || 0,
-      Dernier: daysDiff ? rtf.format(-daysDiff, "day") : "jamais",
+      "Courses depuis": entry?.competitionsSinceLastTrace || 0,
       Occurences: entry?.occurrences || 0,
       "%": entry?.percentage?.toFixed(1) || 0,
     };
