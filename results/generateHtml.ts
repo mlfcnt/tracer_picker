@@ -31,11 +31,11 @@ export const generateHtml = (
   const headerColor = (() => {
     switch (competitionMetadata.discipline) {
       case "GS":
-        return "#ed8bea";
+        return "#f06eec";
       case "SL":
-        return "blue";
+        return "#6e9cf0";
       case "SG":
-        return "green";
+        return "#35f138";
       case "DH":
         return "yellow";
       default:
