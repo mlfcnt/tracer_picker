@@ -1,4 +1,5 @@
 import type { CommitteeCode } from "./constants";
+import { ALGO_WEIGHT_KNOBS } from "./constants";
 
 export type CommitteeEntry = {
   committee: CommitteeCode;
@@ -73,12 +74,24 @@ const calculateHistoricalWeights = (
       return { ...entry, percentage: 0 };
     }
 
-    const basePercentage = entry.percentage;
-    const occurrenceWeight = 1 / (occurrences.get(entry.committee) || 1);
-    const competitionsWeight = Math.max(
-      1,
-      competitionsSinceLastTrace.get(entry.committee) || 0
-    );
+    const basePercentage =
+      entry.percentage * ALGO_WEIGHT_KNOBS.BASE_PERCENTAGE_WEIGHT;
+
+    // Calcul du poids des occurrences
+    const occurrenceWeight = ALGO_WEIGHT_KNOBS.OCCURRENCE_WEIGHT_ENABLED
+      ? 1 /
+        ((occurrences.get(entry.committee) || 1) *
+          ALGO_WEIGHT_KNOBS.OCCURRENCE_DIVIDER)
+      : 1;
+
+    // Calcul du poids du nombre de courses depuis le dernier traçage
+    const competitionsWeight =
+      ALGO_WEIGHT_KNOBS.COMPETITIONS_SINCE_LAST_TRACE_WEIGHT_ENABLED
+        ? Math.max(
+            ALGO_WEIGHT_KNOBS.COMPETITIONS_SINCE_LAST_TRACE_MIN,
+            competitionsSinceLastTrace.get(entry.committee) || 0
+          ) ** ALGO_WEIGHT_KNOBS.COMPETITIONS_SINCE_LAST_TRACE_POWER
+        : 1;
 
     const newPercentage =
       basePercentage * occurrenceWeight * competitionsWeight;

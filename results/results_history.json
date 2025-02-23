@@ -6,5 +6,21 @@
       "manche3": "AP",
       "manche4": "SA"
     }
+  },
+  "31/01/2025_sc_gd_bornan_sl": {
+    "traceurs": {
+      "manche1": "MB",
+      "manche2": "ORS",
+      "manche3": "MB",
+      "manche4": "DA"
+    }
+  },
+  "01/02/2025_sc_gd_bornan_sl": {
+    "traceurs": {
+      "manche1": "MB",
+      "manche2": "APEX",
+      "manche3": "MB",
+      "manche4": "SA"
+    }
   }
 }
