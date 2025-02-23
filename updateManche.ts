@@ -45,14 +45,14 @@ export const updateManche = async (results: CommitteeResults) => {
               isHomeCommittee:
                 results.manche1.find((c) => c.committee === newCommitteeCode)
                   ?.isHomeCommittee || false,
-              picked: true,
+              isPicked: true,
               isHandpicked: true,
             },
             ...results.manche1
               .filter((c) => c.committee !== newCommitteeCode)
               .map((c) => ({
                 ...c,
-                picked: false,
+                isPicked: false,
               })),
           ]
         : results.manche1,
@@ -78,14 +78,14 @@ export const updateManche = async (results: CommitteeResults) => {
               isHomeCommittee:
                 results.manche2.find((c) => c.committee === newCommitteeCode)
                   ?.isHomeCommittee || false,
-              picked: true,
+              isPicked: true,
               isHandpicked: true,
             },
             ...results.manche2
               .filter((c) => c.committee !== newCommitteeCode)
               .map((c) => ({
                 ...c,
-                picked: false,
+                isPicked: false,
               })),
           ]
         : results.manche2,
@@ -111,14 +111,14 @@ export const updateManche = async (results: CommitteeResults) => {
               isHomeCommittee:
                 results.manche3.find((c) => c.committee === newCommitteeCode)
                   ?.isHomeCommittee || false,
-              picked: true,
+              isPicked: true,
               isHandpicked: true,
             },
             ...results.manche3
               .filter((c) => c.committee !== newCommitteeCode)
               .map((c) => ({
                 ...c,
-                picked: false,
+                isPicked: false,
               })),
           ]
         : results.manche3,
@@ -144,14 +144,14 @@ export const updateManche = async (results: CommitteeResults) => {
               isHomeCommittee:
                 results.manche4.find((c) => c.committee === newCommitteeCode)
                   ?.isHomeCommittee || false,
-              picked: true,
+              isPicked: true,
               isHandpicked: true,
             },
             ...results.manche4
               .filter((c) => c.committee !== newCommitteeCode)
               .map((c) => ({
                 ...c,
-                picked: false,
+                isPicked: false,
               })),
           ]
         : results.manche4,

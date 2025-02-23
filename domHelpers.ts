@@ -87,9 +87,7 @@ export async function accessTheCompetitionPage(
 
     if (competitionsCount === 0) {
       log.error("Aucune compétition trouvée pour le code " + competitionCode);
-      throw new Error(
-        "Aucune compétition trouvée pour le code " + competitionCode
-      );
+      page.go;
     }
 
     if (competitionsCount > 1) {
