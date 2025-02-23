@@ -52,7 +52,7 @@ body {
   border-left: 4px solid #4caf50;
 }
 
-.committee-card.picked {
+.committee-card.isPicked {
   border-left: 4px solid #2196f3;
 }
 

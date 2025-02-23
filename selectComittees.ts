@@ -5,6 +5,8 @@ import {
 } from "./algoSelection";
 import type { CommitteeCode } from "./constants";
 import { EXTRA_COMMITTEES_COUNT } from "./constants";
+import fs from "fs";
+import path from "path";
 
 export const countCompetitorsByCommittee = (committees: CommitteeCode[]) => {
   return committees.reduce((acc, committee) => {
@@ -14,7 +16,6 @@ export const countCompetitorsByCommittee = (committees: CommitteeCode[]) => {
 };
 
 export const formatResultsForDisplay = (results: CommitteeResults) => {
-  // Get all unique committees
   const allCommittees = new Set<CommitteeCode>();
   Object.values(results).forEach((committees) =>
     committees.forEach((c) => allCommittees.add(c.committee))
@@ -22,27 +23,36 @@ export const formatResultsForDisplay = (results: CommitteeResults) => {
 
   const okSymbol = "OK";
   const emptySymbol = ".";
+  const rtf = new Intl.RelativeTimeFormat("fr", { numeric: "auto" });
 
   return Array.from(allCommittees).map((committee) => {
-    const row = {
+    const entry = results.manche2.find((c) => c.committee === committee);
+    const daysDiff = entry?.lastDate
+      ? Math.round(
+          (new Date().getTime() - entry.lastDate.getTime()) /
+            (1000 * 60 * 60 * 24)
+        )
+      : null;
+
+    return {
       Comité: committee,
-      M1: results.manche1.find((c) => c.committee === committee)?.picked
+      M1: results.manche1.find((c) => c.committee === committee)?.isPicked
         ? okSymbol
         : emptySymbol,
-      M2: results.manche2.find((c) => c.committee === committee)?.picked
+      M2: results.manche2.find((c) => c.committee === committee)?.isPicked
         ? okSymbol
         : emptySymbol,
-      M3: results.manche3.find((c) => c.committee === committee)?.picked
+      M3: results.manche3.find((c) => c.committee === committee)?.isPicked
         ? okSymbol
         : emptySymbol,
-      M4: results.manche4.find((c) => c.committee === committee)?.picked
+      M4: results.manche4.find((c) => c.committee === committee)?.isPicked
         ? okSymbol
         : emptySymbol,
-      Nb: results.manche2.find((c) => c.committee === committee)?.count || 0,
-      "%":
-        results.manche2.find((c) => c.committee === committee)?.percentage || 0,
+      Nb: entry?.count || 0,
+      Dernier: daysDiff ? rtf.format(-daysDiff, "day") : "jamais",
+      Occurences: entry?.occurrences || 0,
+      "%": entry?.percentage?.toFixed(1) || 0,
     };
-    return row;
   });
 };
 
@@ -85,7 +95,20 @@ export const selectCommittees = async (
       (committeeCounts[committee as CommitteeCode] || 0) + count;
   });
 
-  const results = generateCommitteeResults(committeeCounts, comiteCode);
+  const historyData = JSON.parse(
+    fs.readFileSync(
+      path.join(__dirname, "results", "results_history.json"),
+      "utf8"
+    )
+  );
+
+  console.log({ historyData });
+
+  const results = generateCommitteeResults(
+    committeeCounts,
+    comiteCode,
+    historyData
+  );
   return {
     ...results,
     ...metadata,

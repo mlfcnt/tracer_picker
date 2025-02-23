@@ -60,10 +60,10 @@ async function main() {
     process.exit(0);
   }
 
-  const customOptions: any = {}
+  const customOptions: any = {};
 
   if (process.env.USE_SLOMO) {
-    customOptions.slowMo = 50
+    customOptions.slowMo = 50;
   }
 
   // Launch browser
@@ -125,10 +125,10 @@ async function main() {
         // Add new results
         history[historyKey] = {
           traceurs: {
-            manche1: finalResults.manche1.find((r) => r.picked)?.committee,
-            manche2: finalResults.manche2.find((r) => r.picked)?.committee,
-            manche3: finalResults.manche3.find((r) => r.picked)?.committee,
-            manche4: finalResults.manche4.find((r) => r.picked)?.committee,
+            manche1: finalResults.manche1.find((r) => r.isPicked)?.committee,
+            manche2: finalResults.manche2.find((r) => r.isPicked)?.committee,
+            manche3: finalResults.manche3.find((r) => r.isPicked)?.committee,
+            manche4: finalResults.manche4.find((r) => r.isPicked)?.committee,
           },
         };
 
@@ -142,6 +142,12 @@ async function main() {
         finalResults = updatedResults;
         // displayResults(finalResults);
       }
+    }
+
+    if (isCancel(isResultOk)) {
+      cancel("Opération annulée.");
+      outro("Martin Constructions vous remercie pour votre confiance.");
+      process.exit(0);
     }
 
     const html = generateHtml(finalResults, {
