@@ -4,7 +4,6 @@ import {
   type CommitteeResults,
 } from "./algoSelection";
 import type { CommitteeCode } from "./constants";
-// import chalk from "chalk";
 
 export const countCompetitorsByCommittee = (committees: CommitteeCode[]) => {
   return committees.reduce((acc, committee) => {
@@ -24,16 +23,16 @@ export const formatResultsForDisplay = (results: CommitteeResults) => {
     const row = {
       Comité: committee,
       M1: results.manche1.find((c) => c.committee === committee)?.picked
-        ? "✅"
+        ? "✓"
         : "-",
       M2: results.manche2.find((c) => c.committee === committee)?.picked
-        ? "✅"
+        ? "✓"
         : "-",
       M3: results.manche3.find((c) => c.committee === committee)?.picked
-        ? "✅"
+        ? "✓"
         : "-",
       M4: results.manche4.find((c) => c.committee === committee)?.picked
-        ? "✅"
+        ? "✓"
         : "-",
       Nb: results.manche2.find((c) => c.committee === committee)?.count || 0,
       "%":
@@ -58,14 +57,14 @@ export const selectCommittees = async (
         .querySelector("#container_info_competition h2")
         ?.textContent?.trim() || "";
 
-    const location = titre.split("(")[1].split('-')[0].trim()
+    const location = titre.split("(")[1].split("-")[0].trim();
 
     const discipline = titre.split("-")[1].slice(0, 2);
     const date = titre.split("du")[1].split(",")[0].trim();
     return {
       discipline,
       date,
-      location
+      location,
     };
   });
 
