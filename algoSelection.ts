@@ -9,6 +9,7 @@ export type CommitteeEntry = {
   isHandpicked?: boolean;
   lastDate?: Date;
   occurrences?: number;
+  competitionsSinceLastTrace?: number;
 };
 
 export type CommitteeResults = {
@@ -37,33 +38,35 @@ const calculateHistoricalWeights = (
   history: SelectionHistory,
   excludeCommittee?: CommitteeCode
 ): CommitteeEntry[] => {
-  const now = new Date();
   const occurrences = new Map<CommitteeCode, number>();
-  const lastSelection = new Map<CommitteeCode, Date>();
+  const competitionsSinceLastTrace = new Map<CommitteeCode, number>();
+  const historyEntries = Object.entries(history);
 
-  // Count occurrences and find last selection for each committee
-  Object.entries(history).forEach(([dateKey, data]) => {
-    // Créer une date à 00:00
-    const dateStr = dateKey.split("_")[0].split("/").reverse().join("-");
-    const date = new Date(dateStr);
-    date.setHours(0, 0, 0, 0);
-
-    // Ignorer les dates futures
-    if (date > now) {
-      return;
-    }
-
+  // First pass: count total occurrences for each committee
+  historyEntries.forEach(([, data]) => {
     Object.values(data.traceurs).forEach((committee) => {
       occurrences.set(committee, (occurrences.get(committee) || 0) + 1);
-      const currentLastDate = lastSelection.get(committee);
-      if (!currentLastDate || date > currentLastDate) {
-        lastSelection.set(committee, date);
-      }
     });
   });
 
-  // Pour la date courante aussi
-  now.setHours(0, 0, 0, 0);
+  // Second pass: count competitions since last trace for each committee
+  committees.forEach(({ committee }) => {
+    let count = 0;
+    let found = false;
+
+    // Iterate through history in reverse to count competitions since last trace
+    for (let i = historyEntries.length - 1; i >= 0; i--) {
+      const [, data] = historyEntries[i];
+      if (!found) {
+        if (Object.values(data.traceurs).includes(committee)) {
+          found = true;
+        }
+        count++;
+      }
+    }
+
+    competitionsSinceLastTrace.set(committee, found ? count - 1 : count);
+  });
 
   return committees.map((entry) => {
     if (excludeCommittee && entry.committee === excludeCommittee) {
@@ -72,15 +75,13 @@ const calculateHistoricalWeights = (
 
     const basePercentage = entry.percentage;
     const occurrenceWeight = 1 / (occurrences.get(entry.committee) || 1);
-    const lastDate = lastSelection.get(entry.committee);
-    const timeWeight = lastDate
-      ? Math.max(
-          1,
-          (now.getTime() - lastDate.getTime()) / (1000 * 60 * 60 * 24)
-        )
-      : 5;
+    const competitionsWeight = Math.max(
+      1,
+      competitionsSinceLastTrace.get(entry.committee) || 0
+    );
 
-    const newPercentage = basePercentage * occurrenceWeight * timeWeight;
+    const newPercentage =
+      basePercentage * occurrenceWeight * competitionsWeight;
 
     console.log(`
       Comité ${entry.committee}:
@@ -88,16 +89,18 @@ const calculateHistoricalWeights = (
       - Occurrences: ${
         occurrences.get(entry.committee) || 0
       } fois (weight: ${occurrenceWeight.toFixed(2)})
-      - Dernier tirage: ${
-        lastDate ? `il y a ${timeWeight.toFixed(1)} jours` : "jamais"
-      } (weight: ${timeWeight.toFixed(2)})
+      - Compétitions depuis dernier tracé: ${competitionsSinceLastTrace.get(
+        entry.committee
+      )} (weight: ${competitionsWeight.toFixed(2)})
       - Nouveau %: ${newPercentage.toFixed(2)}%
     `);
 
     return {
       ...entry,
       percentage: newPercentage,
-      lastDate: lastSelection.get(entry.committee),
+      competitionsSinceLastTrace: competitionsSinceLastTrace.get(
+        entry.committee
+      ),
       occurrences: occurrences.get(entry.committee) || 0,
     };
   });
