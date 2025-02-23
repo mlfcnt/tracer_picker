@@ -60,10 +60,16 @@ async function main() {
     process.exit(0);
   }
 
+  const customOptions: any = {}
+
+  if (process.env.USE_SLOMO) {
+    customOptions.slowMo = 50
+  }
+
   // Launch browser
   const browser = await puppeteer.launch({
     headless: true,
-    // slowMo: 50,
+    ...customOptions,
     defaultViewport: {
       width: 1920,
       height: 1080,
