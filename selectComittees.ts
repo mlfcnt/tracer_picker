@@ -5,7 +5,7 @@ import {
   type CommitteeEntry,
 } from "./algoSelection";
 import type { CommitteeCode } from "./constants";
-import { EXTRA_COMMITTEES_COUNT, ALGO_WEIGHT_KNOBS } from "./constants";
+import { EXTRA_COMMITTEES_COUNT, ALGO_WEIGHT_KNOBS, FILTERED_OUT_COMMITTEES } from "./constants";
 import fs from "fs";
 import path from "path";
 
@@ -77,8 +77,8 @@ export const displayResults = (results: CommitteeResults) => {
         selected.competitionsSinceLastTrace === 0
           ? "vient de tracer à la dernière course"
           : selected.competitionsSinceLastTrace === 1
-          ? "n'a pas tracé depuis 1 course"
-          : `n'a pas tracé depuis ${selected.competitionsSinceLastTrace} courses`;
+            ? "n'a pas tracé depuis 1 course"
+            : `n'a pas tracé depuis ${selected.competitionsSinceLastTrace} courses`;
 
       const competitorsText = `représente ${basePercentage.toFixed(
         1
@@ -89,8 +89,8 @@ export const displayResults = (results: CommitteeResults) => {
         selected.occurrences === 0
           ? "n'est pas impacté par les occurrences car il n'a pas encore tracé"
           : occurrenceWeight < 1
-          ? `est pénalisé par ses ${selected.occurrences} traçages cette saison`
-          : "n'est pas pénalisé par ses occurrences";
+            ? `est pénalisé par ses ${selected.occurrences} traçages cette saison`
+            : "n'est pas pénalisé par ses occurrences";
 
       // Texte pour le temps d'attente
       const waitingImpactText =
@@ -98,12 +98,11 @@ export const displayResults = (results: CommitteeResults) => {
           ? "ne reçoit pas de bonus d'attente car il a tracé récemment"
           : `reçoit un bonus car il attend depuis ${selected.competitionsSinceLastTrace} courses`;
 
-      return `Le comité ${
-        selected.committee
-      } ${competitorsText}. Il ${occurrencesText} et ${coursesDepuisText}.
+      return `Le comité ${selected.committee
+        } ${competitorsText}. Il ${occurrencesText} et ${coursesDepuisText}.
       Son score initial de ${basePercentage.toFixed(
-        1
-      )}% ${occurrenceImpactText} (×${occurrenceWeight.toFixed(3)})
+          1
+        )}% ${occurrenceImpactText} (×${occurrenceWeight.toFixed(3)})
       et ${waitingImpactText} (×${competitionsWeight.toFixed(3)}),
       donnant un score final de ${selected.percentage?.toFixed(3)}%.`;
     })();
@@ -114,26 +113,21 @@ export const displayResults = (results: CommitteeResults) => {
     Détails du calcul:
     • Nombre de coureurs: ${selected.count}
     • Nombre d'occurrences: ${selected.occurrences || 0}
-    • Courses depuis dernier traçage: ${
-      selected.competitionsSinceLastTrace || 0
-    }
+    • Courses depuis dernier traçage: ${selected.competitionsSinceLastTrace || 0
+      }
     • Calcul détaillé:
-      - % base (coureurs): ${
-        selected.count
+      - % base (coureurs): ${selected.count
       }/${totalCompetitors} = ${basePercentage.toFixed(2)}%
-      - Poids occurrences: 1 / (${selected.occurrences || 1} × ${
-      ALGO_WEIGHT_KNOBS.OCCURRENCE_DIVIDER
-    }) = ${occurrenceWeight.toFixed(3)}
-      - Poids courses: max(${
-        ALGO_WEIGHT_KNOBS.COMPETITIONS_SINCE_LAST_TRACE_MIN
-      }, ${selected.competitionsSinceLastTrace || 0})^${
-      ALGO_WEIGHT_KNOBS.COMPETITIONS_SINCE_LAST_TRACE_POWER
-    } = ${competitionsWeight.toFixed(3)}
+      - Poids occurrences: 1 / (${selected.occurrences || 1} × ${ALGO_WEIGHT_KNOBS.OCCURRENCE_DIVIDER
+      }) = ${occurrenceWeight.toFixed(3)}
+      - Poids courses: max(${ALGO_WEIGHT_KNOBS.COMPETITIONS_SINCE_LAST_TRACE_MIN
+      }, ${selected.competitionsSinceLastTrace || 0})^${ALGO_WEIGHT_KNOBS.COMPETITIONS_SINCE_LAST_TRACE_POWER
+      } = ${competitionsWeight.toFixed(3)}
       - % final: ${basePercentage.toFixed(2)}% × ${occurrenceWeight.toFixed(
-      3
-    )} × ${competitionsWeight.toFixed(3)} = ${selected.percentage?.toFixed(
-      3
-    )}%`;
+        3
+      )} × ${competitionsWeight.toFixed(3)} = ${selected.percentage?.toFixed(
+        3
+      )}%`;
   };
 
   // Afficher les infos de la compétition
@@ -147,13 +141,11 @@ Résultats pour la compétition:
 
 Comités sélectionnés:
 - Manche 1: ${results.manche1[0].committee} (comité organisateur)
-- Manche 2: ${
-    results.manche2.find((c) => c.isPicked)?.committee
-  }${formatMancheDetails(results.manche2, 2)}
+- Manche 2: ${results.manche2.find((c) => c.isPicked)?.committee
+    }${formatMancheDetails(results.manche2, 2)}
 - Manche 3: ${results.manche3[0].committee} (comité organisateur)
-- Manche 4: ${
-    results.manche4.find((c) => c.isPicked)?.committee
-  }${formatMancheDetails(results.manche4, 4)}
+- Manche 4: ${results.manche4.find((c) => c.isPicked)?.committee
+    }${formatMancheDetails(results.manche4, 4)}
 `);
   console.table(formatResultsForDisplay(results));
 };
@@ -188,10 +180,17 @@ export const selectCommittees = async (
 
   const committeeCounts = countCompetitorsByCommittee(committeesData);
 
+  // Filtre les comités qui ne traceront jamais
+  const filteredCommitteeCounts = Object.fromEntries(
+    Object.entries(committeeCounts).filter(
+      ([committee]) => !FILTERED_OUT_COMMITTEES.includes(committee as CommitteeCode)
+    )
+  ) as Record<CommitteeCode, number>;
+
   // Ajout des comités artificiels
   Object.entries(EXTRA_COMMITTEES_COUNT).forEach(([committee, count]) => {
-    committeeCounts[committee as CommitteeCode] =
-      (committeeCounts[committee as CommitteeCode] || 0) + count;
+    filteredCommitteeCounts[committee as CommitteeCode] =
+      (filteredCommitteeCounts[committee as CommitteeCode] || 0) + count;
   });
 
   const historyData = JSON.parse(
@@ -202,7 +201,7 @@ export const selectCommittees = async (
   );
 
   const results = generateCommitteeResults(
-    committeeCounts,
+    filteredCommitteeCounts,
     comiteCode,
     historyData,
     competitionCode

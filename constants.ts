@@ -9,6 +9,8 @@ export const COMMITTEE_CODES = {
   MV: "MV",
   MJ: "MJ",
   PE: "PE",
+  IF: "IF",
+  AU: 'AU'
 
 };
 
@@ -18,6 +20,8 @@ export const EXTRA_COMMITTEES_COUNT: Partial<Record<CommitteeCode, number>> = {
   APEX: 6,
   ORS: 20,
 };
+
+export const FILTERED_OUT_COMMITTEES: CommitteeCode[] = ["IF", "AU"]
 
 export const SEASON_DATES = {
   start: "15/10/2024",

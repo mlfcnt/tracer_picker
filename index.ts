@@ -15,6 +15,7 @@ import { generateHtml } from "./results/generateHtml";
 import fs from "fs";
 import { updateManche } from "./updateManche";
 
+
 // Add this type near the top of the file
 type ResultsHistory = Record<
   string,
