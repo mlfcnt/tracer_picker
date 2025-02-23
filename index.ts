@@ -90,7 +90,8 @@ async function main() {
 
     const { discipline, date, location, ...results } = await selectCommittees(
       page,
-      committeeCode
+      committeeCode,
+      competitionCode
     );
     displayResults(results);
 

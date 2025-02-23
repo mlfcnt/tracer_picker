@@ -20,6 +20,10 @@ export type CommitteeResults = {
   manche2: CommitteeEntry[];
   manche3: CommitteeEntry[];
   manche4: CommitteeEntry[];
+  date?: string;
+  location?: string;
+  discipline?: string;
+  competitionCode: string;
 };
 
 export type HistoricalEntry = {
@@ -98,7 +102,9 @@ const calculateHistoricalWeights = (
     const baseWeight = occurrenceWeight * competitionsWeight;
     const newPercentage = basePercentage * baseWeight;
 
-    console.log(`
+    // Ne logger que si le comité est sélectionné
+    if (entry.isPicked) {
+      console.log(`
       Comité ${entry.committee}:
       - Base %: ${basePercentage}%
       - Occurrences: ${
@@ -109,6 +115,7 @@ const calculateHistoricalWeights = (
       )} (weight: ${competitionsWeight.toFixed(2)})
       - Nouveau %: ${newPercentage.toFixed(2)}%
     `);
+    }
 
     return {
       ...entry,
@@ -126,7 +133,8 @@ const calculateHistoricalWeights = (
 export const generateCommitteeResults = (
   committeeCounts: Record<CommitteeCode, number>,
   comiteCode: CommitteeCode,
-  history: SelectionHistory
+  history: SelectionHistory,
+  competitionCode: string
 ): CommitteeResults => {
   const nonHomeCommittees = Object.entries(committeeCounts).filter(
     ([c, count]) => c && c !== comiteCode && count > 0
@@ -146,7 +154,7 @@ export const generateCommitteeResults = (
 
   const homeCount = committeeCounts[comiteCode] || 0;
 
-  return performRandomDraw(
+  const results = performRandomDraw(
     {
       manche1: [
         {
@@ -171,6 +179,11 @@ export const generateCommitteeResults = (
     },
     history
   );
+
+  return {
+    ...results,
+    competitionCode,
+  };
 };
 
 export const performRandomDraw = (
