@@ -14,5 +14,13 @@
       "manche3": "MB",
       "manche4": "ORS"
     }
+  },
+  "09/02/2025_sc_menuires_cr": {
+    "traceurs": {
+      "manche1": "SA",
+      "manche2": "ORS",
+      "manche3": "SA",
+      "manche4": "APEX"
+    }
   }
 }

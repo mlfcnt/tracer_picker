@@ -67,6 +67,21 @@ export async function accessTheCompetitionPage(
     await page.waitForNetworkIdle();
     await page.type("#num_evenement", competitionCode, { delay: 100 });
     await page.waitForNetworkIdle();
+    // ici on veut filtrer les dates debut et fin de saison
+
+    // debut: input type text name debut
+    await page.waitForSelector("input[name='debut']", { visible: true });
+    await page.type(
+      "input[name='debut']",
+      process.env.SEASON_START || "15/10/2024"
+    );
+
+    // fin: input type text name fin
+    await page.waitForSelector("input[name='fin']", { visible: true });
+    await page.type(
+      "input[name='fin']",
+      process.env.SEASON_END || "30/04/2025"
+    );
 
     // click the search button
     await page.click("#recherche_competition");
@@ -87,7 +102,9 @@ export async function accessTheCompetitionPage(
 
     if (competitionsCount === 0) {
       log.error("Aucune compétition trouvée pour le code " + competitionCode);
-      page.go;
+      throw new Error(
+        "Aucune compétition trouvée pour le code " + competitionCode
+      );
     }
 
     if (competitionsCount > 1) {
